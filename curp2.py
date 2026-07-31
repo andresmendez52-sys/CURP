@@ -2,15 +2,37 @@
 import tkinter as tk
 from tkinter import ttk
 
+def consonante(texto):
+   for i in texto[1:]:
+       if i not in  "AEIOU":
+           return i
+
+
 def datos():
-    apellidoP = apellidoPtk.get()
-    apellidoM = apellidoMtk.get()
-    nombre = nombretk.get()
-    genero = generotk.get()
+    apellidoP = apellidoPtk.get().upper()
+    apellidoM = apellidoMtk.get().upper()
+    nombre = nombretk.get().upper()
+    genero = generotk.get().upper()
     dia = diatk.get()
     mes = mestk.get()
     anio = aniotk.get()
-    lugarNac = lugartk.get()
+
+    estado = lugartk.get()
+    lugarNac = ESTADOS_CURP.get(estado,"NE")
+
+    p14 = consonante(apellidoP)
+    p15 = consonante(apellidoM)
+    p16 = consonante(nombre)
+
+    curp = apellidoP[0:2] + apellidoM[0]+ nombre[0]+ anio + mes + dia + genero[0] + lugarNac + p14 + p15 + p16 +"00"
+
+    resultado_entry.config(state = "normal")
+    resultado_entry.delete(0, tk.END)
+    resultado_entry.insert(0, curp)
+    resultado_entry.config(state="readonly")
+
+
+
 
 ventana = tk.Tk()  # Crea la ventana
 ventana.title("Mi CURP")  # Título
@@ -83,15 +105,17 @@ tk.Label(ventana, text="Lugar de nacimiento:").place(x=10, y=300)
 lugartk = ttk.Combobox(ventana, values=list(ESTADOS_CURP.keys()), state="readonly", width=25)
 lugartk.place(x=200, y=300) # Campo de entrada
 
-tk.Button(ventana, text="GENERAR").place(x=10, y=340)
+#============================
+#BOTON GENERADOR
+#============================
 
-datos()
+bt_generar = tk.Button(ventana, text="GENERAR", command=datos)
+bt_generar.place(x=10, y=340)
 
+tk.Label(ventana, text="CURP GENERADA").place(x=410,y=340)
 
-
-
-#curp = apellidoP[0:2] + apellidoM[0]+ nombre[0]+ dia + mes + anio + genero[0] + lugarNacimiento[0:3] + P14 + P15 + P16 + "00"
-
+resultado_entry = tk.Entry(ventana, width=25, font=("Arial", 11, "bold"), state="readonly")
+resultado_entry.place(x=200, y=340)
 
 
 
