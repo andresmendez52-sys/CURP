@@ -12,7 +12,7 @@ def datos():
     apellidoP = apellidoPtk.get().upper()
     apellidoM = apellidoMtk.get().upper()
     nombre = nombretk.get().upper()
-    genero = generotk.get().upper()
+    genero = SEXO.get(generotk.get(), "H")
     dia = diatk.get()
     mes = mestk.get()
     anio = aniotk.get()
@@ -59,9 +59,14 @@ apellidoMtk.place(x=200, y=90)  # Campo de entrada
 tk.Label(ventana, text="Ingresa tu nombre:").place(x=10, y=120)
 nombretk = tk.Entry(ventana)
 nombretk.place(x=200, y=120)  # Campo de entrada
+#GENERO
+
+SEXO = {
+    "HOMBRE": "H", "MUJER": "M"
+}
 
 tk.Label(ventana, text="Ingresa tu genero:").place(x=10, y=150)
-generotk = tk.Entry(ventana)
+generotk = ttk.Combobox(ventana, values=list(SEXO.keys()), state="readonly", width=17)
 generotk.place(x=200, y=150)  # Campo de entrada
 
 
@@ -100,6 +105,7 @@ ESTADOS_CURP = {
     "VERACRUZ": "VZ", "YUCATAN": "YN", "ZACATECAS": "ZS",
     "NACIDO EN EL EXTRANJERO": "NE"
 }
+
 
 tk.Label(ventana, text="Lugar de nacimiento:").place(x=10, y=300)
 lugartk = ttk.Combobox(ventana, values=list(ESTADOS_CURP.keys()), state="readonly", width=25)
