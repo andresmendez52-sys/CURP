@@ -2,16 +2,81 @@
 import tkinter as tk
 from tkinter import ttk
 
+def groserias(texto):
+    PALABRAS_INCONVENIENTES = [
+    "BACA", "BAKA", "BUEI", "BUEY", "CACA", "CACO", "CAGA", "CAGO", "CAKA", "CAKO",
+    "COGE", "COGI", "COJA", "COJE", "COJI", "COJO", "COLA", "CULO", "FALU", "FETO",
+    "GETA", "GUEI", "GUEY", "KACA", "KACO", "KAGA", "KAGO", "KAKA", "KAKO", "KOGE",
+    "KOGI", "KOJA", "KOJE", "KOJI", "KOJO", "KULA", "KULO", "LOCA", "LOCO", "LOKA",
+    "LOKO", "MAME", "MAMO", "MEAR", "MEAN", "MEON", "MIAR", "MION", "MOCO", "MOKO",
+    "MULA", "MULO", "NACA", "NACO", "PEDA", "PEDO", "PENE", "PIPI", "PITO", "POPO",
+    "PUTA", "PUTO", "QULO", "RATA", "ROBA", "ROBE", "ROBO", "RUIN", "SENA", "SENO",
+    "TETO", "VACA", "VAGA", "VAGO", "VAKA", "VAKO", "VUEI", "VUEY", "WUEI", "WUEY"
+]
+    for i in PALABRAS_INCONVENIENTES:
+        if i in texto:
+            return True
+    return False
+
+
 def consonante(texto):
    for i in texto[1:]:
        if i not in  "AEIOU":
            return i
 
 
+def not_number(texto):
+    valido = True
+    for palabra in texto.split():
+        if not palabra.isalpha():
+            return False
+    return True
+
+def validacion(texto):
+    if texto[0] == " " or texto[-1] == " ":
+        return False
+    if "  " in texto:
+        return False
+    if len(texto) < 3:
+        return False
+    
+    return True
+
+def denegacion(texto):
+    palabra = texto.split()
+    exepsiones = ["DE", "DEL", "LA", "LAS", "LOS", "MC", "VON", "Y","MARIA", "JOSE"]
+    i = 0
+    for i in palabra:
+        if i not in exepsiones:
+            return i
+
+
 def datos():
+
     apellidoP = apellidoPtk.get().upper()
     apellidoM = apellidoMtk.get().upper()
     nombre = nombretk.get().upper()
+
+#=======================
+#VALIDACION DE DATOS
+#=======================
+
+
+    if not validacion(apellidoP) or not validacion(apellidoM) or not validacion(nombre):
+        resultado_entry.config(state = "normal")
+        resultado_entry.delete(0, tk.END)
+        resultado_entry.insert(0, "Error: Ingresa datos validos.")
+        resultado_entry.config(state="readonly")
+        return
+
+    nombre = denegacion(nombre)
+    apellidoP = denegacion(apellidoP)
+    apellidoM = denegacion(apellidoM)
+
+
+
+
+
     genero = SEXO.get(generotk.get(), "H")
     dia = diatk.get()
     mes = mestk.get()
@@ -24,12 +89,28 @@ def datos():
     p15 = consonante(apellidoM)
     p16 = consonante(nombre)
 
-    curp = apellidoP[0:2] + apellidoM[0]+ nombre[0]+ anio + mes + dia + genero[0] + lugarNac + p14 + p15 + p16 +"00"
+    if not_number(apellidoP) and not_number(apellidoM) and not_number(nombre):
+    
+        curp = apellidoP[0:2] + apellidoM[0]+ nombre[0]+ anio + mes + dia + genero[0] + lugarNac + p14 + p15 + p16 +"00"
 
-    resultado_entry.config(state = "normal")
-    resultado_entry.delete(0, tk.END)
-    resultado_entry.insert(0, curp)
-    resultado_entry.config(state="readonly")
+        if groserias(curp[0:4]):
+            curp = list(curp)
+            curp[1] = "X"
+            curp = "".join(curp)
+
+
+            
+        resultado_entry.config(state = "normal")
+        resultado_entry.delete(0, tk.END)
+        resultado_entry.insert(0, curp)
+        resultado_entry.config(state="readonly")
+    else:
+        resultado_entry.config(state = "normal")
+        resultado_entry.delete(0, tk.END)
+        resultado_entry.insert(0, "Error: Ingresa solo letras.")
+        resultado_entry.config(state="readonly")
+
+
 
 
 
