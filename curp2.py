@@ -78,9 +78,10 @@ def datos():
 
 
     genero = SEXO.get(generotk.get(), "H")
+
     dia = diatk.get()
     mes = mestk.get()
-    anio = aniotk.get()
+    anio = aniotk.get()[-2:]
 
     estado = lugartk.get()
     lugarNac = ESTADOS_CURP.get(estado,"NE")
@@ -109,7 +110,6 @@ def datos():
         resultado_entry.delete(0, tk.END)
         resultado_entry.insert(0, "Error: Ingresa solo letras.")
         resultado_entry.config(state="readonly")
-
 
 
 
@@ -161,17 +161,22 @@ linea.pack(fill='x', pady=10)
 tk.Label(ventana, text="FECHA DE NACIMIENTO").place(x=360,y=175)  # Etiqueta
 
 
+DIAS = [str(a).zfill(2) for a in range(1, 32)] 
+MESES = [str(a).zfill(2) for a in range(1, 13)] 
+ANIOS = [str(a) for a in range(1900, 2027)] 
+
+
 #DIA
 tk.Label(ventana, text="Ingresa tu dia de nacimiento:").place(x=10, y=210)
-diatk = tk.Entry(ventana)
+diatk = ttk.Combobox(ventana, values=DIAS, state="readonly", width=17)
 diatk.place(x=200, y=210) # Campo de entrada
 #MES
 tk.Label(ventana, text="Ingresa tu mes de nacimiento:").place(x=10, y=240)
-mestk = tk.Entry(ventana)
+mestk = ttk.Combobox(ventana, values=MESES, state="readonly", width=17)
 mestk.place(x=200, y=240) # Campo de entrada
 #AÑO
 tk.Label(ventana, text="Ingresa tu año de nacimiento:").place(x=10, y=270)
-aniotk = tk.Entry(ventana)
+aniotk = ttk.Combobox(ventana, values=ANIOS, state="readonly", width=17)
 aniotk.place(x=200, y=270) # Campo de entrada
 #LUGAR DE NACIMIENTO
 ESTADOS_CURP = {
